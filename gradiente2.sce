@@ -20,25 +20,33 @@ function plota3D(x, y, fx, janela)
     datatipSetDisplay(d,"mydisplay3D");
 endfunction
 
-function [d]=plotaLabel3D(x, y, fx, janela, varargin)
+function [d, e, f]=plotaLabel3D(x, y, fx, janela, varargin)
     [lhs,rhs]=argn(0);
 
     scf(janela);
-    e=gce();
-    drawlater();
-    d1=datatipCreate(e, [x, y, fx]);
+    f1 = scatter3([x x], [y y], [fx fx], 400, "red", "fill", "*");
+    param3d1([x x], [y y], [fx fx+5]);
+    e1 = gce();
+    d1=datatipCreate(e1, 2);
     d1.visible="off";
-    d1.font_size=6;
+    d1.font_size=4;
     d1.orientation=1;
     d1.box_mode=%T;
-    datatipSetDisplay(d1,"mydisplay3D");
+    disp(d1);
+    datatipSetDisplay(d1, "mydisplay3D");
     drawnow();
     d1.visible="on";
-    if rhs>=5 then
+    if rhs>=7 then
         d = varargin(1);
-        d.visible="off";
+        e = varargin(2);
+        f = varargin(3);
+        d.visible = "off";
+        e.visible = "off";
+        f.visible = "off";
     end
     d = d1;
+    e = e1;
+    f = f1;
 endfunction
 
 x=[0:0.1:2*%pi];
@@ -50,20 +58,22 @@ clf(1);
 plot3d(x, y, fxy);
 
 erro = 0.0001;
-e = 0.1;
+ep = 0.1;
 
-xm = 3*%pi/4;   // Este eh o valor inicial de x
-ym = 3*%pi/4;   // Este eh o valor inicial de y
+xm = 3.9*%pi/4;   // Este eh o valor inicial de x
+ym = 3.9*%pi/4;   // Este eh o valor inicial de y
 xa = xm+erro;
 ya = ym+erro;
 
-d = plotaLabel3D(xm, ym, sin(xm)*cos(ym), 1);
-// sleep(500);
+[d, e, f] = plotaLabel3D(xm, ym, sin(xm)*cos(ym), 1);
+sleep(500);
 
-/* // Esta eh a implementação do gradient descendent para uma variável
-while(abs(xm-xa)>erro)
+/// Esta eh a implementação do gradient descendent para uma variável
+while(abs(xm-xa)>erro && abs(ym-ya)>erro)
     xa = xm;
-    xm = xm - e*cos(xm); // cos(x) é o laplaciano de sen(x)
-    d = plotaLabel2D(xm, sin(xm), 1, d);
+    ya = ym;
+    xm = xm - ep*cos(xm)*cos(ym);    // Lembre-se que estas duas linhas correspondem ao laplaciano de sen(x)cos(y)
+    ym = ym - ep*sin(xm)*(-sin(ym));
+    [d, e, f] = plotaLabel3D(xm, ym, sin(xm)*cos(ym), 1, d, e, f);
 end
-*/
+
