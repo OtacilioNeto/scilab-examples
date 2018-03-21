@@ -20,11 +20,11 @@ function plota3D(x, y, fx, janela)
     datatipSetDisplay(d,"mydisplay3D");
 endfunction
 
-function [d, e, f]=plotaLabel3D(x, y, fx, janela, varargin)
+function [d,  e, f]=plotaLabel3D(x, y, fx, janela, varargin)
     [lhs,rhs]=argn(0);
 
     scf(janela);
-    f1 = scatter3([x x], [y y], [fx fx], 400, "red", "fill", "*");
+    f1=scatter3([x x], [y y], [fx fx], 400, "red", "fill", "*");
     param3d1([x x], [y y], [fx fx+5]);
     e1 = gce();
     d1=datatipCreate(e1, 2);
@@ -32,7 +32,6 @@ function [d, e, f]=plotaLabel3D(x, y, fx, janela, varargin)
     d1.font_size=4;
     d1.orientation=1;
     d1.box_mode=%T;
-    disp(d1);
     datatipSetDisplay(d1, "mydisplay3D");
     drawnow();
     d1.visible="on";
