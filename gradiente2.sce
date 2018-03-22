@@ -27,6 +27,7 @@ function [d,  e, f]=plotaLabel3D(x, y, fx, janela, varargin)
     f1=scatter3([x x], [y y], [fx fx], 400, "red", "fill", "*");
     param3d1([x x], [y y], [fx fx+5]);
     e1 = gce();
+    drawlater();
     d1=datatipCreate(e1, 2);
     d1.visible="off";
     d1.font_size=4;
