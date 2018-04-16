@@ -6,20 +6,6 @@ function str=mydisplay3D(h)
     str=msprintf('(%0.3f, %0.3f, %0.4f)', pt(1), pt(2), pt(3));
 endfunction
 
-function plota3D(x, y, fx, janela)
-    scf(janela);
-    clf(janela);
-    plot3d(x, y, fx);
-    
-    e=gce();e=e.children;
-    d=datatipCreate(e(1), 1);
-    d.font_size=4;
-    d.orientation=1;
-    d.box_mode=%F;
-        
-    datatipSetDisplay(d,"mydisplay3D");
-endfunction
-
 function [d,  e, f]=plotaLabel3D(x, y, fx, janela, varargin)
     [lhs,rhs]=argn(0);
 
