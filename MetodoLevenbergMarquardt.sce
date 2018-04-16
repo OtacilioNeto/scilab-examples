@@ -18,39 +18,40 @@ function [J1] = J(x, teta)
     // Lembre-se que eh o calculo do Jacobiano da funcao de erro
     for i=1:size(x, 1)
         J1(i, 1) = -x(i)/(teta(2)+x(i));
-        J1(i, 2) = teta(1)*x(i)/((teta(2)+x(i))*(teta(2)+x(i)))
+        J1(i, 2) = teta(1)*x(i)/((teta(2)+x(i))^2);
     end
 endfunction
 
-function lteta=GaussNewtonI(Y, X, teta, n)
-    lteta = teta;
-    for i=1:n
-        Z1 = Z(Y, X, lteta);
-        J1 = J(X, lteta);
-        lteta = lteta - inv(J1'*J1)*J1'*Z1;
-    end
-endfunction
-
-function [teta, resto, iteracoes]=GaussNewton(Y, X, teta, residuo)
+function [teta, resto, iteracoes]=LevenbergMarquardt(Y, X, teta, lambda, moduloErro)
     iteracoes = 0;
-    Z1 = Z(Y, X, teta);
-    J1 = J(X, teta);
-    resto = inv(J1'*J1)*J1'*Z1;
-    while(norm(resto)>residuo)
+    
+    terminou = %F;
+    while(terminou == %F)
+        Z1 = Z(Y, X, teta); // Calcula o erro
+        J1 = J(X, teta);    // Calcula o Jacobiano
+        oldteta = teta;     // Salva o conjunto de parametros
+        JJ = J1'*J1;
+        I = eye(size(JJ, 1),size(JJ, 1));
+        resto = inv(JJ+lambda*I)*J1'*Z1; // Calcula o novo valor do resto
+        teta = teta - resto;    // Atualiza o valor dos parametros
+        Z2 = Z(Y, X, teta); // Calcula o novo valor do erro
+        if (norm(Z2) <= norm(Z1)) then
+            lambda = lambda / 10;
+        else
+            teta = oldteta;
+            lambda = lambda * 10;
+        end
         iteracoes = iteracoes + 1;
-        teta = teta - resto;
-        
-        Z1 = Z(Y, X, teta);
-        J1 = J(X, teta);
-        resto = inv(J1'*J1)*J1'*Z1;
+        if(norm(Z2-Z1)<moduloErro) then
+            terminou = %T;
+        end
     end
 endfunction
 
 Y=[0.050 0.127 0.094 0.2122 0.2729 0.2665 0.3317]'; // Valores medidos
 X=[0.038 0.194 0.425 0.626  1.253  2.500  3.740]';  // Valores de entradas para 
                                                     // a função de ajuste
-tetaI=[0.9 0.2]';               // Valores iniciais dos parâmetros
-iteracoes=10;                   // Numero de iterações
+tetaI=[9 2]';               // Valores iniciais dos parâmetros
 residuo = 0.0000000005;         // Enquanto o incremento for maior que isso continue 
                                 // a otimização
 
@@ -62,7 +63,7 @@ residuo = 0.0000000005;         // Enquanto o incremento for maior que isso cont
 // A = tetaI(1); B = tetaI(2)
 
 scatter(X, Y);
-[teta, residuo, iteracoes] = GaussNewton(Y, X, tetaI, residuo);
+[teta, residuo, iteracoes] = LevenbergMarquardt(Y, X, tetaI, 100, residuo);
 
 mprintf("\nValores iniciais dos parametros: %f %f\n", tetaI(1), tetaI(2));
 mprintf("Valores finais dos parametros: %f %f (%d iteracoes) (residuo = %0.12f)\n", teta(1), teta(2), iteracoes, residuo);
@@ -75,4 +76,4 @@ end
 
 plot2d(X1, Y1);
 
-xtitle("Método Gauss Newton");
+xtitle("Método Levenberg-Marquardt");
