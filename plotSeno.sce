@@ -7,20 +7,6 @@ function str=mydisplay2D(h)
     str=msprintf('(%0.3f, %0.3f)', pt(1), pt(2));
 endfunction
 
-function plota2D(x, fx, janela)
-    scf(janela);
-    clf(janela);
-    plot(x, fx);
-    
-    e=gce();e=e.children;
-    d=datatipCreate(e(1), 1);
-    d.font_size=4;
-    d.orientation=1;
-    d.box_mode=%F;
-        
-    datatipSetDisplay(d,"mydisplay2D");
-endfunction
-
 x=[0:0.01:2*%pi];
 fx=sin(x);
 
