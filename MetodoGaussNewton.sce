@@ -61,6 +61,8 @@ residuo = 0.0000000005;         // Enquanto o incremento for maior que isso cont
 // Onde A e B sao os parametros que se quer ajustar e valem inicialmente
 // A = tetaI(1); B = tetaI(2)
 
+scf(1);
+clf(1);
 scatter(X, Y);
 [teta, residuo, iteracoes] = GaussNewton(Y, X, tetaI, residuo);
 
