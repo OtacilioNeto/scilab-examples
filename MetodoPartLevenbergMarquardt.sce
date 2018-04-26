@@ -71,8 +71,8 @@ function [teta, resto, CoVar, iteracoes]=PartLevenbergMarquardt(pY, X, teta, Var
     
     Y  = W*inv(V);
     VarA = pinv(U-Y*W');
-    VarB = Y'*Ea*Y+inv(V);
-    VarAB = -Ea*Y;
+    VarB = Y'*VarA*Y+inv(V);
+    VarAB = - VarA*Y;
     
     CoVar=[VarA VarAB; VarAB' VarB];
 endfunction
