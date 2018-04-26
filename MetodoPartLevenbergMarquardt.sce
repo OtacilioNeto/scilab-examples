@@ -27,21 +27,21 @@ function [A, B] = J(x, teta, lenghtA)
     end
 endfunction
 
-function [teta, resto, Ea, Eb, Eab, iteracoes]=PartLevenbergMarquardt(pY, X, teta, E, lambda, moduloErro)
+function [teta, resto, CoVar, iteracoes]=PartLevenbergMarquardt(pY, X, teta, Var, lambda, moduloErro)
     iteracoes = 0;
     
     terminou = %F;
-    invE = inv(E);
+    invV = inv(Var);
     while(terminou == %F)
         [A B] = J(X, teta, 1);      // Calcula o Jacobiano
         e = Z(pY, X, teta);         // Calcula o erro
         J1 = [A B];
         
-        U = A'*invE*A;
-        V = B'*invE*B;
-        W = A'*invE*B;
-        eA = A'*invE*e;
-        eB = B'*invE*e;
+        U = A'*invV*A;
+        V = B'*invV*B;
+        W = A'*invV*B;
+        eA = A'*invV*e;
+        eB = B'*invV*e;
         
         Ua = U+lambda*eye(size(U, 1), size(U,1));
         Va = V+lambda*eye(size(V, 1), size(V,1));
@@ -70,15 +70,17 @@ function [teta, resto, Ea, Eb, Eab, iteracoes]=PartLevenbergMarquardt(pY, X, tet
     resto = [da db]';
     
     Y  = W*inv(V);
-    Ea = pinv(U-Y*W');
-    Eb = Y'*Ea*Y+inv(V);
-    Eab = -Ea*Y;
+    VarA = pinv(U-Y*W');
+    VarB = Y'*Ea*Y+inv(V);
+    VarAB = -Ea*Y;
+    
+    CoVar=[VarA VarAB; VarAB' VarB];
 endfunction
 
 Y=[0.050 0.127 0.094 0.2122 0.2729 0.2665 0.3317]'; // Valores medidos
 X=[0.038 0.194 0.425 0.626  1.253  2.500  3.740 ]'; // Valores de entradas para 
                                                     // a função de ajuste
-covariancia = eye(size(Y,1), size(Y,1));
+variancia = eye(size(Y,1), size(Y,1));
 tetaI=[9 2]';               // Valores iniciais dos parâmetros
 residuo = 0.0000000005;         // Enquanto o incremento for maior que isso continue 
                                 // a otimização
@@ -92,10 +94,12 @@ residuo = 0.0000000005;         // Enquanto o incremento for maior que isso cont
 scf(1);
 clf(1);
 scatter(X, Y);
-[teta, residuo, Ea, Eb, Eab, iteracoes] = PartLevenbergMarquardt(Y, X, tetaI, covariancia, 100, residuo);
+[teta, residuo, CoVar, iteracoes] = PartLevenbergMarquardt(Y, X, tetaI, variancia, 100, residuo);
 
 mprintf("\nValores iniciais dos parametros:\n%f\n%f\n", tetaI(1), tetaI(2));
-mprintf("\nValores finais dos parametros:\n%f covariancia %f;\n%f covariancia %f;\ncovariancia cruzada %f\n(%d iteracoes) (residuo = %0.12f)\n", teta(1), Ea, teta(2), Eb, Eab, iteracoes, residuo);
+mprintf("\nValores finais dos parametros:\n%f;\n%f;\n(%d iteracoes) (residuo = %0.12f)\n", teta(1), teta(2), iteracoes, residuo);
+mprintf("Covariancia\n");
+disp(CoVar);
 
 X1=[0:0.1:max(X)+1];
 Y1=zeros(X1);
