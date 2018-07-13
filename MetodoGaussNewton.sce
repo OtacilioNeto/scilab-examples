@@ -21,12 +21,13 @@ function [J1] = J(x, teta)
     end
 endfunction
 
-function lteta=GaussNewtonI(Y, X, teta, n)
-    lteta = teta;
+function estado=GaussNewtonI(Y, X, valorInicial, n)
+    estado = valorInicial;
     for i=1:n
-        Z1 = Z(Y, X, lteta);
-        J1 = J(X, lteta);
-        lteta = lteta - inv(J1'*J1)*J1'*Z1;
+        Z1 = Z(Y, X, estado);
+        J1 = J(X, estado);
+        incremento = - inv(J1'*J1)*J1'*Z1;
+        estado = estado + incremento;
     end
 endfunction
 
@@ -34,15 +35,16 @@ function [teta, resto, iteracoes]=GaussNewton(Y, X, teta, residuo)
     iteracoes = 0;
     Z1 = Z(Y, X, teta);
     J1 = J(X, teta);
-    resto = inv(J1'*J1)*J1'*Z1;
-    while(norm(resto)>residuo)
+    incremento = -inv(J1'*J1)*J1'*Z1;
+    while(norm(incremento)>residuo)
         iteracoes = iteracoes + 1;
-        teta = teta - resto;
+        teta = teta + incremento;
         
         Z1 = Z(Y, X, teta);
         J1 = J(X, teta);
-        resto = inv(J1'*J1)*J1'*Z1;
+        incremento = -inv(J1'*J1)*J1'*Z1;
     end
+    resto = incremento;
 endfunction
 
 Y=[0.050 0.127 0.094 0.2122 0.2729 0.2665 0.3317]'; // Valores medidos

@@ -22,7 +22,8 @@ endfunction
 function BS1=B_s_1(Y, X, B)
     r = calc_r(Y, X, B);
     J = calc_J(X, B);
-    BS1 = B - inv(J'*J)*J'*r;
+    incremento = - inv(J'*J)*J'*r;
+    BS1 = B + incremento;
 endfunction
 
 Y = [0.050 0.127 0.094 0.2122 0.2729 0.2665 0.3317]';
