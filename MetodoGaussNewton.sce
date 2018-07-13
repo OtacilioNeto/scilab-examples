@@ -17,8 +17,7 @@ function [J1] = J(x, teta)
     J1= zeros(size(x, 1), size(teta, 1));    
     // Lembre-se que eh o calculo do Jacobiano da funcao de erro
     for i=1:size(x, 1)
-        J1(i, 1) = -x(i)/(teta(2)+x(i));
-        J1(i, 2) = teta(1)*x(i)/((teta(2)+x(i))*(teta(2)+x(i)))
+        J1(i, :) = [-x(i)/(teta(2)+x(i)) teta(1)*x(i)/((teta(2)+x(i))^2)];
     end
 endfunction
 

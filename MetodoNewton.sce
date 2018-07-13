@@ -1,3 +1,6 @@
+// Solucao do exemplo https://pt.wikipedia.org/wiki/Algoritmo_de_Gauss-Newton#Exemplo
+
+
 funcprot(0)
 clc
 function R=calc_r(Y, X, B)  // Calcula o erro (analogia com erro de reprojeção)
