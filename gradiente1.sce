@@ -35,10 +35,11 @@ scf(1);
 clf(1);
 plot(x, fx);
 
+// Até aqui foi para plotar o gráfico do seno
+
 erro = 0.00001;
 e = 0.1;
-
-xm = %pi/2+0.01;   // Este eh o valor inicial de x
+xm = %pi/2+0.1;   // Este eh o valor inicial de x
 
 // Esta eh a implementação do gradient descendent para uma variável
 while(%T)
