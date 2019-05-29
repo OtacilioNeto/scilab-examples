@@ -35,18 +35,19 @@ scf(1);
 clf(1);
 plot(x, fx);
 
-erro = 0.0001;
+erro = 0.00001;
 e = 0.1;
 
-xm = 3*%pi/4;   // Este eh o valor inicial de x
-xa = xm+erro;
+xm = %pi/2+0.01;   // Este eh o valor inicial de x
 
 d = plotaLabel2D(xm, sin(xm), 1);
-sleep(500);
 
 // Esta eh a implementação do gradient descendent para uma variável
-while(abs(xm-xa)>erro)
+while(%T)
+    d = plotaLabel2D(xm, sin(xm), 1, d);
     xa = xm;
     xm = xm - e*cos(xm); // cos(x) é o laplaciano de sen(x)
-    d = plotaLabel2D(xm, sin(xm), 1, d);
+    if(abs(xm-xa)<erro)then
+        break;
+    end
 end
