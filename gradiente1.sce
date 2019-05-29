@@ -40,8 +40,6 @@ e = 0.1;
 
 xm = %pi/2+0.01;   // Este eh o valor inicial de x
 
-d = plotaLabel2D(xm, sin(xm), 1);
-
 // Esta eh a implementação do gradient descendent para uma variável
 while(%T)
     d = plotaLabel2D(xm, sin(xm), 1, d);
