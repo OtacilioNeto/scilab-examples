@@ -45,23 +45,24 @@ scf(1);
 clf(1);
 plot3d(x, y, fxy);
 
-erro = 0.0001;
-ep = 0.1;
+erro = 0.00001;
+p = 0.1;
 
-xm = 2; //3.9*%pi/4;   // Este eh o valor inicial de x
-ym = 2; //3.9*%pi/4;   // Este eh o valor inicial de y
+xi = %pi/2+0.1; // Este eh o valor inicial de x
+yi = %pi/2+0.1; // Este eh o valor inicial de y
 
-[d, e, f] = plotaLabel3D(xm, ym, sin(xm)*cos(ym), 1);
+xi_1 = xi-erro;
+yi_1 = yi-erro;
+
+
+[d, e, f] = plotaLabel3D(xi, yi, sin(xi)*cos(yi), 1);
 
 /// Esta eh a implementação do gradient descendent para uma variável
-while(%T)
-    xa = xm;
-    ya = ym;
-    xm = xm - ep*cos(xm)*cos(ym);    // Lembre-se que estas duas linhas correspondem ao laplaciano de sen(x)cos(y)
-    ym = ym - ep*sin(xm)*(-sin(ym));
-    if(abs(xm-xa)<erro && abs(ym-ya)<erro)then
-        break;
-    end
-    [d, e, f] = plotaLabel3D(xm, ym, sin(xm)*cos(ym), 1, d, e, f);    
+while(abs(xi-xi_1)>=erro || abs(yi-yi_1)>=erro)
+    [d, e, f] = plotaLabel3D(xi, yi, sin(xi)*cos(yi), 1, d, e, f);    
+    xi_1 = xi;
+    yi_1 = yi;
+    xi = xi_1 - p*cos(xi_1)*cos(yi_1);    // Lembre-se que estas duas linhas correspondem ao gradiente de sen(x)cos(y)
+    yi = yi_1 - p*sin(xi_1)*(-sin(yi_1));
 end
 

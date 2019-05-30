@@ -1,4 +1,4 @@
-// Implementação do gradiente descendente para f(x)=sen(x);
+// Implementação do método do gradiente para f(x)=sen(x);
 funcprot(0);
 
 function str=mydisplay2D(h)
@@ -35,18 +35,17 @@ scf(1);
 clf(1);
 plot(x, fx);
 
-// Até aqui foi para plotar o gráfico do seno
+// A implementação do algoritmo começa neste ponto
 
 erro = 0.00001;
-e = 0.1;
-xm = %pi/2+0.1;   // Este eh o valor inicial de x
+p = 0.1;
+xi = %pi/2+0.1;   // Este eh o valor inicial de x
+xi_1 = xi-erro;
+d = 1;
 
 // Esta eh a implementação do gradient descendent para uma variável
-while(%T)
-    d = plotaLabel2D(xm, sin(xm), 1, d);
-    xa = xm;
-    xm = xm - e*cos(xm); // cos(x) é o laplaciano de sen(x)
-    if(abs(xm-xa)<erro)then
-        break;
-    end
+while(abs(xi-xi_1)>=erro)
+    d = plotaLabel2D(xi, sin(xi), 1, d);
+    xi_1 = xi;
+    xi = xi_1 - p*cos(xi_1); // cos(x) é o gradiente de sen(x)
 end
