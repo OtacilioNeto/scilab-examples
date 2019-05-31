@@ -48,21 +48,17 @@ plot3d(x, y, fxy);
 erro = 0.00001;
 p = 0.1;
 
-xi = %pi/2+0.1; // Este eh o valor inicial de x
-yi = %pi/2+0.1; // Este eh o valor inicial de y
+Vi = [%pi/2  %pi/2]' + [0.1 0.1]'; // Este eh o valor inicial de y
 
-xi_1 = xi-erro;
-yi_1 = yi-erro;
+Vi_1 = Vi - [erro erro]';
 
-
-[d, e, f] = plotaLabel3D(xi, yi, sin(xi)*cos(yi), 1);
+[d, e, f] = plotaLabel3D(Vi(1), Vi(2), sin(Vi(1))*cos(Vi(2)), 1);
 
 /// Esta eh a implementação do gradient descendent para uma variável
-while(abs(xi-xi_1)>=erro || abs(yi-yi_1)>=erro)
-    [d, e, f] = plotaLabel3D(xi, yi, sin(xi)*cos(yi), 1, d, e, f);    
-    xi_1 = xi;
-    yi_1 = yi;
-    xi = xi_1 - p*cos(xi_1)*cos(yi_1);    // Lembre-se que estas duas linhas correspondem ao gradiente de sen(x)cos(y)
-    yi = yi_1 - p*sin(xi_1)*(-sin(yi_1));
+while(abs(Vi - Vi_1)>=erro)
+    [d, e, f] = plotaLabel3D(Vi(1), Vi(2), sin(Vi(1))*cos(Vi(2)), 1, d, e, f);    
+    Vi_1 = Vi;  
+    Vi = Vi - p*[cos(Vi_1(1))*cos(Vi_1(2)) ...
+        sin(Vi_1(1))*(-sin(Vi_1(2)))]';
 end
 
