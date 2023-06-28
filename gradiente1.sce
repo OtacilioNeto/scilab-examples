@@ -34,8 +34,7 @@ fx=sin(x);
 scf(1);
 clf(1);
 plot(x, fx);
-
-// A implementação do algoritmo começa neste ponto
+// pause();// A implementação do algoritmo começa neste ponto
 
 erro = 0.00001;
 p = 0.1;

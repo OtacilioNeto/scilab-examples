@@ -11,7 +11,7 @@ function [d,  e, f]=plotaLabel3D(x, y, fx, janela, varargin)
     [lhs,rhs]=argn(0);
 
     scf(janela);
-    f1=scatter3([x x], [y y], [fx fx], 400, "red", "fill", "*");
+    f1=scatter3d([x x], [y y], [fx fx], 400, "red", "fill", "*");
     // O +5 eh para posicionamento do label
     param3d1([x x], [y y], [fx fx+5]);
     e1 = gce();
@@ -37,24 +37,20 @@ function [d,  e, f]=plotaLabel3D(x, y, fx, janela, varargin)
     f = f1;
 endfunction
 
-x=[0:0.1:2*%pi];
-y=[0:0.1:2*%pi];
+x=[0*%pi:0.1:2*%pi];
+y=[0*%pi:0.1:2*%pi];
 fxy=sin(x')*cos(y);
 
 scf(1);
 clf(1);
 plot3d(x, y, fxy);
-
+// pause();
+/// Esta eh a implementação do gradient descendent
 erro = 0.00001;
-p = 0.1;
-
+p = 0.1; // Passo
 Vi = [%pi/2  %pi/2]' + [0.1 0.1]'; // Este eh o valor inicial de y
-
 Vi_1 = Vi - [erro erro]';
-
 [d, e, f] = plotaLabel3D(Vi(1), Vi(2), sin(Vi(1))*cos(Vi(2)), 1);
-
-/// Esta eh a implementação do gradient descendent para uma variável
 while(abs(Vi - Vi_1)>=erro)
     [d, e, f] = plotaLabel3D(Vi(1), Vi(2), sin(Vi(1))*cos(Vi(2)), 1, d, e, f);    
     Vi_1 = Vi;  
