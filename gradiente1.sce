@@ -43,7 +43,7 @@ xi_1 = xi-erro;
 d = 1;
 
 // Esta eh a implementação do gradient descendent para uma variável
-while(abs(xi-xi_1)>=erro)
+while(norm(xi-xi_1)>=erro)
     d = plotaLabel2D(xi, sin(xi), 1, d);
     xi_1 = xi;
     xi = xi_1 - p*cos(xi_1); // cos(x) é o gradiente de sen(x)
